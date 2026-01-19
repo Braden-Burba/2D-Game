@@ -1,7 +1,7 @@
 The objective of the game is simple, try to hit the moving player on the right half of the board.
 The left player is controlled using w,a,s,d and simply fire a bullet by left clicking the computer mouse.
 The game has a UI that allows the players to navigate the game and change features like the settings.
-PLEASE ONLY EXIT THE GAME USING THE EXIT BUTTON ON THE MAIN MENU. The file can only be deleted if the exit button is used. If this is not done correctly, then go into the task manager and end the java tasks.
+PLEASE ONLY EXIT THE GAME USING THE EXIT BUTTON ON THE MAIN MENU.
 
 
 The Difficulty can be changed in multiple ways:
@@ -10,3 +10,4 @@ The Difficulty can be changed in multiple ways:
 -The moveCounterSpeed Variable; #The amount of time it takes for the AI to change its direction (Larger value is harder, Smaller value is easier)
 
 -The movementSpeed Variable; #The speed at which the AI will move (Larger value is harder, Smaller value is easier)
+
