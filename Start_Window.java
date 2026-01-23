@@ -1,14 +1,18 @@
-
+/*Braden Burba
+ *1/23/2026
+ *Hit That Target!
+ *Objective: The user is the left player and is trying to hit the moving target on the right.
+ *Controls: WASD to move, left mouse click to fire
+ */
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 import java.awt.*;
-
 import javax.imageio.ImageIO;
-import javax.swing.*; //The swing library is used to create a window for the 2D games
+import javax.swing.*;
 import java.util.*;
 import java.io.*;
 public class Start_Window implements ActionListener{
+	//Start_Window - Methods and members to create the game window objects
 	private static windows startWindow;
 	private static gameScreenWindow gameWindow;
 	private static windows settingsWindow;
@@ -22,6 +26,8 @@ public class Start_Window implements ActionListener{
 	}
 	
 	public static void main(String[] args) {
+		//main(): Initializes the different user interface windows and starts the multi-threading for the game window
+		//Implementation: Declares windows, gameScreenWindows, gameLoop, and thread objects
 		mainWindow = new Start_Window();
 		startWindow = new windows("Home Screen", mainWindow);
 		gameWindow = new gameScreenWindow("Game Screen", mainWindow);
@@ -39,6 +45,8 @@ public class Start_Window implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//actionPerformed(): Listening for button inputs to produce specific outputs for the user interface
+		//Implementation: Checks the action command name for specific buttons and calls the appropriate functions for specific button presses
 		String command = e.getActionCommand();
 		if(command.equals("playButton")) {
 			startWindow.hideWindow();
@@ -129,17 +137,17 @@ public class Start_Window implements ActionListener{
 }//END OF main
 
 class windows{
+	//windows - Methods and members to create different windows for the game
 	private JFrame window;
 	private JLabel score;
 	private Start_Window mainWindow;
 	windows(String title,Start_Window mainWindow){
+		//windows(): Constructor that initializes the graphics of the window objects
+		//Implementation:Compares the input title and will set up JButtons and window graphics
 		this.mainWindow = mainWindow;
 		this.window = new JFrame(title);
 		this.window.setLayout(null);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//if(title.equals("Home Screen")) {
-		//	this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
-		//}
 		if(title.equals("Home Screen")) {
 			double WINDOWWIDTH = 1800;
 			double WINDOWHEIGHT = 900;
@@ -275,39 +283,56 @@ class windows{
 	}
 	
 	public void showWindow() {
+		//showWindow(): Will allow the user to see the current window object
+		//Implementation: Call the setVisible command
 		this.window.setVisible(true);
 	}
 	
 	public void hideWindow() {
+		//hideWindow(): Will hide the current window object from the user
+		//Implementation: Call the setVisible command
 		this.window.setVisible(false);
 	}
 	
 	public boolean isWindowVisible() {
+		//isWindowVisible(): Returns the current window objects visibility status
+		//Implementation: Calls the isVisibile command
 		return this.window.isVisible();
 	}
 	
 	public int getWindowWidth() {
+		//getWindowWidth(): Returns the width of the current window object
+		//Implementation: Calls the getWidth command
 		return this.window.getWidth();
 	}
 	
 	public int getWindowHeight() {
+		//getWindowHeight(): Returns the height of the current window object
+		//Implementation: Calls the getHeight command
 		return this.window.getHeight();
 	}
 	
 	public void addPanel(gamePanel panel) {
+		//addPanel(): Adds a game panel object onto the current window object
+		//Implementation: Calls the add command
 		this.window.add(panel);
 	}
 	
 	public JFrame getWindow() {
+		//getWindow(): Returns the current window object
+		//Implementation: Calls for the window jframe
 		return this.window;
 	}
 	
 	public JLabel getScoreLabel() {
+		//getScoreLabel(): Returns the the JLabel responsible for tracking score
+		//Implementation: Calls for the JLabel object
 		return this.score;
 	}
 }//END OF windows
 
 class gameScreenWindow extends windows{
+	//gameScreenWindow: Methods and members that inherits the windows class
 	private player player1;
 	private player player2;
 	private java.util.List<projectiles> player1Bullets;
@@ -317,6 +342,8 @@ class gameScreenWindow extends windows{
 	private int movementSpeed = 0;
 	private int moveCounterSpeed = 0;
 	gameScreenWindow(String title, Start_Window mainWindow) {
+		//gameScreenWindow(): Constructor that creates the game window seen by the user
+		//Implementation: Assigns variables, initializes player positions, creates a projectile array, and initializes game panel object for drawing the screen
 		super(title,mainWindow);
 		int initialPlayerStagger = 20;
 		int initialPlayerHeight = 450;
@@ -326,94 +353,133 @@ class gameScreenWindow extends windows{
 		player1Bullets = Collections.synchronizedList(new ArrayList<>());
 		screen = new gamePanel(player1, player2, player1Bullets, bulletSpeed, bulletAmount);
 		this.addPanel(screen);
-		//this.window.add(screen);
 		screen.setBounds(0, 0, this.getWindowWidth(), this.getWindowHeight());
 		this.drawScreen();
 	}
 	
 	public void drawScreen() {
+		//drawScreen(): Updates the game panel object
+		//Implementation: Calls the JPanel class that is responsible for drawing the game screen
 		screen.repaint();
 		this.getWindow().repaint();
 	}
 	
 	public void setMovementSpeed(int givenMovementSpeed) {
+		//setMovementSpeed(): Updates the player movement speed
+		//Implementation: Assigns variable
 		this.movementSpeed = givenMovementSpeed;
 	}
 	
 	public void setMoveCounterSpeed(int givenMoveCounterSpeed) {
+		//setMoveCounterSpeed(): Updates the time before the AI changes directions
+		//Implementation: Assigns variable
 		this.moveCounterSpeed = givenMoveCounterSpeed;
 	}
 	
 	public void setBulletSpeed(double givenBulletSpeed) {
+		//setBulletSpeed(): Updates the speed of the bullet
+		//Implementation: Passes variable to the game panel object function
 		screen.setBulletSpeed(givenBulletSpeed);
 	}
 	
 	public void setBulletAmount(int givenBulletAmount) {
+		//setBulletAmount(): Updates the number of bullets available on the screen at one time
+		//Implementation: Passes variable to the game panel object function
 		screen.setBulletAmount(givenBulletAmount);
 	}
 	
 	public int getMovementSpeed() {
+		//getMovementSpeed(): Returns the current player movement speed
+		//Implementation: Return statement
 		return this.movementSpeed;
 	}
 	
 	public int getMoveCounterSpeed() {
+		//getMoveCounterSpeed(): Returns the current time it takes for the AI to change directions
+		//Implementation: Return statement
 		return this.moveCounterSpeed;
 	}
 	
 	public int getPlayer1BulletSize() {
+		//getPlayer1BulletSize(): Returns the current number of projectiles on the screen
+		//Implementation: Return statement
 		return this.player1Bullets.size();
 	}
 	
 	public projectiles getProjectile(int i) {
+		//getProjectile(): Returns the projectile object at a given index
+		//Implementation: Return statement
 		return this.player1Bullets.get(i);
 	}
 	
 	public projectiles removeProjectile(int i) {
+		//removeProjectile(): Removes the projectile at a given index and returns its data
+		//Implementation: Return statement
 		return this.player1Bullets.remove(i);
 	}
 	
 	public void resetplayer1Bullets() {
+		//resetplayer1Bullets(): Removes all bullet objects from the synchronized arraylist
+		//Implementation: Calls the clear function
 		this.player1Bullets.clear();
 	}
 	
 	public player getPlayer1() {
+		//getPlayer1(): Returns player 1 data
+		//Implementation: Return statement
 		return this.player1;
 	}
 	
 	public player getPlayer2() {
+		//getPlayer2(): Returns player 2 (AI) data
+		//Implementation: Return statement
 		return this.player2;
 	}
 	
 	public gamePanel getPanel() {
+		//getPanel(): Returns the gamePanel object that is used for drawing the game screen
+		//Implementation: Return statement
 		return this.screen;
 	}
 	
 	static class player{
+		//player - Inner class that stores player position information
 		private int player_X;
 		private int player_Y;
 		player(int x, int y){
+			//player(): Constructor to store player location data
+			//Implementation: Assigns variables
 			player_X = x;
 			player_Y = y;
 		}
 		
 		public int getPlayer_X() {
+			//getPlayer_X(): Returns the current player objects x position
+			//Implementation: Return statement
 			return this.player_X;
 		}
 		
 		public int getPlayer_Y() {
+			//getPlayer_Y(): Returns the current player objects y position
+			//Implementation: Return statement
 			return this.player_Y;
 		}
 		
 		public void setPlayer_X(int x) {
+			//setPlayer_X(): Sets the current player objects x position
+			//Implementation: Assign variable
 			this.player_X = x;
 		}
 		
 		public void setPlayer_Y(int y) {
+			//setPlayer_Y(): Sets the current player objects y position
+			//Implementation: Assign variable
 			this.player_Y = y;
 		}
 	}
 	
 	static class projectiles{
+		//projectiles - Inner class that stores projectile location and direction information
 		private double launchAngle;
 		private double bullet_X;
 		private double bullet_Y;
@@ -421,6 +487,8 @@ class gameScreenWindow extends windows{
 		private double scale_Y;
 		private int framesUntil_X_Reached;
 		projectiles(double launchAngle,double bullet_X,double bullet_Y, double scale_X, double scale_Y){
+			//projectiles(): Constructor to create and store projectile data
+			//Implementation: Assign variables
 			this.launchAngle = launchAngle;
 			this.bullet_X = bullet_X;
 			this.bullet_Y = bullet_Y;
@@ -429,34 +497,50 @@ class gameScreenWindow extends windows{
 		}
 		
 		public double getBullet_X() {
+			//getBullet_X(): Returns the current projectile objects x position
+			//Implementation: Return statement
 			return this.bullet_X;
 		}
 		
 		public double getBullet_Y() {
+			//getBullet_Y(): Returns the current projectile objects y position
+			//Implementation: Return statement
 			return this.bullet_Y;
 		}
 		
 		public void setBullet_X(double x) {
+			//setBullet_X(): Sets the current projectile objects x position
+			//Implementation: Assign variable
 			this.bullet_X = x;
 		}
 		
 		public void setBullet_Y(double y) {
+			//setBullet_Y(): Sets the current projectile objects y position
+			//Implementation: Assign variable
 			this.bullet_Y = y;
 		}
 		
 		public double getScale_X() {
+			//getScale_X(): Returns the x component of the unit vector for the current projectile object
+			//Implementation: Return statement
 			return this.scale_X;
 		}
 		
 		public double getScale_Y() {
+			//getScale_Y(): Returns the y component of the unit vector for the current projectile object
+			//Implementation: Return statement
 			return this.scale_Y;
 		}
 		
 		public void setFramesUntil_X_Reached(int FramesUntil_X_Reached) {
+			//setFramesUntil_X_Reached(): Update the number of frames that it will take a projectile to hit the AI in the x direction
+			//Implementation: Assign variable
 			this.framesUntil_X_Reached = FramesUntil_X_Reached;
 		}
 		
 		public int getFramesUntil_X_Reached() {
+			//getFramesUntil_X_Reached(): Returns the number of frames that it will take a projectile to hit the AI in the x direction
+			//Implementation: Return statement
 			return this.framesUntil_X_Reached;
 		}
 		
@@ -465,6 +549,7 @@ class gameScreenWindow extends windows{
 }//END OF gameScreenWindow
 
 class gamePanel extends JPanel implements KeyListener, MouseListener{
+	//gamePanel - Responsible for storing player input information and drawing the game screen
 	private Map<Integer,String> keyPressed = new HashMap<>();
 	private boolean wPressed = false,aPressed = false,sPressed = false,dPressed = false;
 	private gameScreenWindow.player player1;
@@ -476,6 +561,8 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 	private double bulletSpeed = 0;
 	private int bulletAmount = 0;
 	gamePanel(gameScreenWindow.player player1, gameScreenWindow.player player2, java.util.List<gameScreenWindow.projectiles> player1Bullets, double givenBulletSpeed, int givenBulletAmount){
+		//gamePanel(): Constructor that initializes the game panel object
+		//Implementation: Assigns variables, pulls resources, updates key and mouse listeners
 		keyPressed.put(KeyEvent.VK_W, "W");
 		keyPressed.put(KeyEvent.VK_A, "A");
 		keyPressed.put(KeyEvent.VK_S, "S");
@@ -497,15 +584,21 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 	}
 	
 	protected void setBulletSpeed(double givenBulletSpeed) {
+		//setBulletSpeed(): Sets the bullet speed
+		//Implementation: Assign variable
 		this.bulletSpeed = givenBulletSpeed;
 	}
 	
 	protected void setBulletAmount(int givenBulletAmount) {
+		//setBulletAmount(): Sets the number of bullets allowed at one time
+		//Implementation: Assign variable
 		this.bulletAmount = givenBulletAmount;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//keyPressed(): Constantly checks if a key is pressed, which key it is, and sets the appropriate boolean
+		//Implementation: Using a keylistener and the getKeyCode command
 		int status = e.getKeyCode();
 		if(status == KeyEvent.VK_W) {
 			this.wPressed = true;
@@ -528,6 +621,8 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		//keyReleased(): Constantly checks if a key is released, which key it is, and sets the appropriate boolean
+		//Implementation: Using a keylistener and the getKeyCode command
 		int status = e.getKeyCode();
 		if(status == KeyEvent.VK_W) {
 			this.wPressed = false;
@@ -545,6 +640,8 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		//paintComponent(): Actually draws the game screen window for the user to see
+		//Implementation: Uses the drawImage command used for making rectangle objects, updating every bullet with a while loop
 		super.paintComponent(g);
 		int PLAYERWIDTH = 100;
 		int PLAYERHEIGHT = 50;
@@ -561,22 +658,32 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 	}
 	
 	public boolean getwPressed() {
+		//getwPressed(): Returns if the w key is pressed
+		//Implementation: Return statement
 		return this.wPressed;
 	}
 	
 	public boolean getaPressed() {
+		//getaPressed(): Returns if the a key is pressed
+		//Implementation: Return statement
 		return this.aPressed;
 	}
 	
 	public boolean getsPressed() {
+		//getsPressed(): Returns if the s key is pressed
+		//Implementation: Return statement
 		return this.sPressed;
 	}
 	
 	public boolean getdPressed() {
+		//getdPressed(): Returns if the d key is pressed
+		//Implementation: Return statement
 		return this.dPressed;
 	}
 
 	public void resetPressedBooleans() {
+		//resetPressedBooleans(): Sets all key booleans to false
+		//Implementation: Asssign variables
 		this.wPressed = false;
 		this.aPressed = false;
 		this.sPressed = false;
@@ -589,6 +696,8 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		//mousePressed(): Listening for when a mouse button is pressed, and initializes the projectile object. This part ensures projectiles can not go behind player1
+		//Implementation: Performing math functions using the mouse press location, calculates launch angle, the slope unit vector, and checks if a bullet is going backwards (click_X)
 		double launchAngle = 0;
 		double click_X = e.getX()-(this.player1.getPlayer_X()+100);
 		double click_Y = this.player1.getPlayer_Y()+25.0-e.getY();
@@ -621,6 +730,7 @@ class gamePanel extends JPanel implements KeyListener, MouseListener{
 }
 
 class gameLoop implements Runnable{
+	//gameLoop - Methods and members that run the game thread and controls the AI
 	private static volatile boolean pause = false;
 	private gameScreenWindow gameWindow;
 	private int moveCounter = randomMove(300);
@@ -629,11 +739,15 @@ class gameLoop implements Runnable{
 	private static volatile int score = 0;
 	
 	gameLoop(gameScreenWindow gameWindow){
+		//gameLoop(): Constructor to create a gameLoop object
+		//Implementation: Passes the gameScreenWindow object to the gameLoop
 		this.gameWindow = gameWindow;
 	}
 	
 	@Override
 	public void run() {
+		//run(): The game loop
+		//Implementation: Will check if the game is paused, if it is then sleep, if it is not then the AI position and score is updated
 		while(true) {
 			if(pause == true) {
 				try {
@@ -795,6 +909,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private boolean checkForCollision() {
+		//checkForCollision(): Will look for projectiles that are colliding with the player
+		//Implementation: Uses Axis-Aligned Bounding Box (AABB) collision math for the player and projectile rectangles
 		boolean collided = false;
 		int length = this.gameWindow.getPlayer1BulletSize()-1;
 		while(length>=0) {
@@ -808,6 +924,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private void updatePlayer1Bullets() {
+		//updatePlayer1Bullets(): Will check for bullets that go off of the screen and removes them
+		//Implementation: Will compare the bullets future position with the window boundaries
 		int length = this.gameWindow.getPlayer1BulletSize()-1;
 		double scaleX = 0;
 		double scaleY = 0;
@@ -830,8 +948,8 @@ class gameLoop implements Runnable{
 	}
 
 	private void moveAI(int movementDirection1) {
-		//int movementDirection = movementDirection1;
-		//player2 AI
+		//moveAI(): Will move the AI in the direction that it calculates with the movementDirection1 variable
+		//Implementation: Uses a switch statement to pick a direction, calls the movement function
 		int player2_Yup = this.gameWindow.getPlayer2().getPlayer_Y()-this.gameWindow.getMovementSpeed();
 		int player2_Ydown = this.gameWindow.getPlayer2().getPlayer_Y()+this.gameWindow.getMovementSpeed();
 		int player2_XLeft = this.gameWindow.getPlayer2().getPlayer_X()-this.gameWindow.getMovementSpeed();
@@ -878,30 +996,40 @@ class gameLoop implements Runnable{
 	}
 	
 	private void AI_UP(int player2_Yup) {
+		//AI_UP(): Moves the AI up
+		//Implementation: If inbounds, updates player 2 y value
 		if(player2_Yup>=60) { //up //Original 0-39
 			this.gameWindow.getPlayer2().setPlayer_Y(player2_Yup);
 		}
 	}
 	
 	private void AI_DOWN(int player2_Ydown, int bottomWall) {
+		//AI_DOWN(): Moves the AI down
+		//Implementation: If inbounds, updates player 2 y value
 		if(player2_Ydown+50 <= bottomWall) { //down //Original 120-159
 			this.gameWindow.getPlayer2().setPlayer_Y(player2_Ydown);
 		}
 	}
 	
 	private void AI_LEFT(int player2_XLeft) {
+		//AI_LEFT(): Moves the AI Left
+		//Implementation: If inbounds, updates player 2 x value
 		if(player2_XLeft >= this.gameWindow.getWindowWidth()/2) { //left
 			this.gameWindow.getPlayer2().setPlayer_X(player2_XLeft);
 		}
 	}
 	
 	private void AI_RIGHT(int player2_XRight, int rightWall) {
+		//AI_RIGHT(): Moves the AI right
+		//Implementation: If inbounds, updates player 2 x value
 		if(player2_XRight+100 <= rightWall) { //right
 			this.gameWindow.getPlayer2().setPlayer_X(player2_XRight);
 		}
 	}
 	
 	private void AI_DOWNRIGHT(int player2_Ydown, int bottomWall, int player2_XRight, int rightWall) {
+		//AI_DOWNRIGHT(): Moves the AI down and right
+		//Implementation: If inbounds, updates player 2 x and y value
 		if(player2_Ydown+50 <= bottomWall && player2_XRight+100 <= rightWall) { //down/right
 			this.gameWindow.getPlayer2().setPlayer_Y(player2_Ydown);
 			this.gameWindow.getPlayer2().setPlayer_X(player2_XRight);
@@ -911,6 +1039,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private void AI_DOWNLEFT(int player2_Ydown, int bottomWall, int player2_XLeft) {
+		//AI_DOWNLEFT(): Moves the AI down and left
+		//Implementation: If inbounds, updates player 2 x and y value
 		if(player2_Ydown+50 <= bottomWall && player2_XLeft >= this.gameWindow.getWindowWidth()/2) {  //down/left
 			this.gameWindow.getPlayer2().setPlayer_Y(player2_Ydown);
 			this.gameWindow.getPlayer2().setPlayer_X(player2_XLeft);
@@ -920,6 +1050,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private void AI_UPRIGHT(int player2_Yup, int player2_XRight, int rightWall) {
+		//AI_UPRIGHT(): Moves the AI up and right
+		//Implementation: If inbounds, updates player 2 x and y value
 		if(player2_Yup>=60 && player2_XRight+100 <= rightWall) { //up/right
 			this.gameWindow.getPlayer2().setPlayer_Y(player2_Yup);
 			this.gameWindow.getPlayer2().setPlayer_X(player2_XRight);
@@ -929,6 +1061,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private void AI_UPLEFT(int player2_XLeft, int player2_Yup) {
+		//AI_UPLEFT(): Moves the AI up and left
+		//Implementation: If inbounds, updates player 2 x and y value
 		if(player2_XLeft >= this.gameWindow.getWindowWidth()/2 && player2_Yup>=60) { //up/left
 			this.gameWindow.getPlayer2().setPlayer_Y(player2_Yup);
 			this.gameWindow.getPlayer2().setPlayer_X(player2_XLeft);
@@ -938,6 +1072,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private String getAIDirection(int movementDirection) {
+		//getAIDirection(): Returns the AI current direction based on the movementDirection variable
+		//Implementation: Uses an if statement to check direction
 		if(20 <= movementDirection && movementDirection <= 39) { //up //Original 0-39
 			return "UP";
 		}
@@ -966,6 +1102,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private boolean predictCollisions(int AI_X, int AI_Y) {
+		//predictCollisions(): Will find the frame when a bullet and the AI collide, calculates the y value at that frame, then checks for collision
+		//Implementation: Uses Axis-Aligned Bounding Box (AABB) collision, and kinematics principles to check for collisions with every bullet
 		int PLAYERWIDTH = 100;
 		int PLAYERHEIGHT = 50;
 		int BULLETWIDTH = 20;
@@ -982,7 +1120,6 @@ class gameLoop implements Runnable{
 				continue;
 			}
 			double framesUntil_X_Reached = (AI_X - projectile_X)/projectile_X_Velocity;
-			//this.gameWindow.getProjectile(length).setFramesUntil_X_Reached((int)framesUntil_X_Reached);
 			if(framesUntil_X_Reached <= 0) {
 				length--;
 				continue;
@@ -1002,6 +1139,8 @@ class gameLoop implements Runnable{
 	}
 	
 	private void movePlayer() {
+		//movePlayer(): Will move player 1
+		//Implementation: Check which key was pressed and if the player will remain inbounds
 		if(this.gameWindow.getPanel().getwPressed() == true) { //up
 			if(this.gameWindow.getPlayer1().getPlayer_Y()-1>=60) {
 				this.gameWindow.getPlayer1().setPlayer_Y(this.gameWindow.getPlayer1().getPlayer_Y()-1);
@@ -1024,14 +1163,20 @@ class gameLoop implements Runnable{
 	}
 	
 	public void pauseGame() {
+		//pauseGame(): Pauses the game
+		//Implementation: Assign variable
 		pause = true;
 	}
 	
 	public void startGame() {
+		//startGame(): Starts the game
+		//Implementation: Assign variable
 		pause = false;
 	}
 	
 	public void resetGame() {
+		//resetGame(): Resets the game
+		//Implementation: Assigns variables and resets values
 		this.gameWindow.getPlayer1().setPlayer_X(20);
 		this.gameWindow.getPlayer1().setPlayer_Y(450);
 		this.gameWindow.getPlayer2().setPlayer_X(this.gameWindow.getWindowWidth()-20-100);
@@ -1043,11 +1188,15 @@ class gameLoop implements Runnable{
 	}
 	
 	public void resetScore() {
+		//resetScore(): Resets the score for the score label
+		//Implementation: Calls getScoreLabel object and sets text
 		score = 0;
 		this.gameWindow.getScoreLabel().setText("Current Score: " + score);
 	}
 	
 	private static int randomMove(int topRange) {
+		//randomMove(): Determines a random integer within a specific range
+		//Implementation: Created a random object and returns a value
 		Random rand = new Random();
 		return rand.nextInt(topRange);
 	}
